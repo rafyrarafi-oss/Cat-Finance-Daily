@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Masuk — Finance Daily QRIS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6C4CF0">
+  <link rel="apple-touch-icon" href="assets/icon/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Finance QRIS">
+  <link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+  <div class="app">
+    <div class="content" style="display:flex;flex-direction:column;justify-content:center;padding:24px 28px 40px">
+      <div style="text-align:center;margin-bottom:34px">
+        <div class="logo" style="width:72px;height:72px;border-radius:22px;margin:0 auto;animation:floaty 4s ease-in-out infinite">
+          <span class="ms fill" style="font-size:38px">savings</span>
+        </div>
+        <div style="font-family:'Space Grotesk';font-weight:700;font-size:24px;margin-top:20px;letter-spacing:-.4px">Finance Daily QRIS</div>
+        <div class="muted" style="font-size:13px;font-weight:500;margin-top:6px">Kelola arus kas harian Anda</div>
+      </div>
+
+      <label class="fld" style="margin-top:0">Username</label>
+      <div class="input"><span class="ms">person</span><input id="username" placeholder="owner" autocomplete="username"></div>
+
+      <label class="fld">Password</label>
+      <div class="input">
+        <span class="ms">lock</span>
+        <input id="password" type="password" placeholder="123456" autocomplete="current-password">
+        <span class="ms" id="eye" style="cursor:pointer">visibility_off</span>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:10px">
+        <a href="#" style="font-size:12.5px;font-weight:600">Lupa password?</a>
+      </div>
+
+      <div id="err" class="hidden" style="display:flex;align-items:center;gap:8px;margin-top:14px;padding:11px 14px;border-radius:13px;background:rgba(229,72,77,.1);border:1px solid rgba(229,72,77,.25)">
+        <span class="ms" style="font-size:18px;color:var(--red)">error</span>
+        <span id="err-msg" style="font-size:12.5px;font-weight:600;color:#C23A3F"></span>
+      </div>
+
+      <button class="btn" id="login-btn" style="margin-top:22px">
+        <span class="ms spin hidden" id="load-ic">progress_activity</span>
+        <span id="btn-label">Masuk</span>
+      </button>
+
+      <div class="muted" style="text-align:center;font-size:12px;font-weight:500;margin-top:22px">
+        Demo: <b style="color:var(--muted2)">owner</b> / <b style="color:var(--muted2)">123456</b>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js?v=4"></script>
+  <script src="js/currency.js?v=4"></script>
+  <script src="js/utils.js?v=4"></script>
+  <script src="js/store.js?v=4"></script>
+  <script src="js/auth.js?v=4"></script>
+  <script>
+    if(getSession()) location.href='dashboard.html';
+    const eye=$('#eye'), pass=$('#password'), btn=$('#login-btn'), lbl=$('#btn-label'), load=$('#load-ic');
+    eye.addEventListener('click', function(){
+      const show = pass.type==='password'; pass.type = show?'text':'password'; eye.textContent = show?'visibility':'visibility_off';
+    });
+    function showErr(m){ $('#err').classList.remove('hidden'); $('#err-msg').textContent=m; }
+    async function doLogin(){
+      $('#err').classList.add('hidden');
+      const u=$('#username').value.trim(), p=$('#password').value.trim();
+      if(!u||!p){ showErr('Username dan password wajib diisi'); return; }
+      lbl.textContent='Memproses…'; load.classList.remove('hidden'); btn.disabled=true;
+      try{
+        const user = await Store.login(u,p);
+        setSession(user);
+        setTimeout(function(){ location.href='dashboard.html'; }, 400);
+      }catch(e){
+        showErr(e.message||'Gagal masuk'); lbl.textContent='Masuk'; load.classList.add('hidden'); btn.disabled=false;
+      }
+    }
+    btn.addEventListener('click', doLogin);
+    pass.addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+  </script>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</body>
+</html>

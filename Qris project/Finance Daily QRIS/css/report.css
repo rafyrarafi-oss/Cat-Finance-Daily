@@ -1,0 +1,21 @@
+/* css/report.css — penyesuaian khusus halaman riwayat/laporan + gaya cetak */
+.tx-menu button.act:active{transform:translateY(1px)}
+
+/* Analitik: bar kategori */
+.cat-bar{margin-bottom:11px}
+.cat-bar .top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:5px}
+.cat-bar .top .amt{font-family:'Space Grotesk';font-weight:700;color:var(--ink)}
+.cat-bar .track{height:8px;border-radius:999px;background:rgba(108,76,240,.12);overflow:hidden}
+.cat-bar .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--primary2))}
+#monthCmp .card{padding:12px 14px}
+.mc-k{font-size:11px;color:var(--muted);font-weight:600}
+.mc-v{font-family:'Space Grotesk';font-weight:700;font-size:16px;margin-top:3px}
+.mc-d{font-size:10.5px;font-weight:700;margin-top:3px;display:flex;align-items:center;gap:2px}
+.mc-d.up{color:var(--green)} .mc-d.down{color:var(--red)}
+
+@media print{
+  .topbar .icon-btn,.bottom-nav,#search,#ranges,#types,#statuses,#print,#export-csv,#analytics,#load-more,.menu-btn,.tx-menu,.modal-backdrop{display:none!important}
+  body{background:#fff}
+  .app{box-shadow:none;max-width:100%}
+  .content{padding:0 12px}
+}

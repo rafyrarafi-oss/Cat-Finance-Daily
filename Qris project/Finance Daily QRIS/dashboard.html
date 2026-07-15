@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Dashboard — Finance Daily QRIS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6C4CF0">
+  <link rel="apple-touch-icon" href="assets/icon/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Finance QRIS">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/dashboard.css?v=4">
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo"><span class="ms fill">storefront</span></div>
+        <div>
+          <div class="sub">Selamat datang,</div>
+          <h1 id="biz">Warung Sari Rasa</h1>
+        </div>
+      </div>
+      <div class="icon-btn"><span class="ms">notifications</span></div>
+    </div>
+
+    <div class="content">
+      <!-- hero -->
+      <div class="hero">
+        <div class="glow"></div>
+        <div style="position:relative">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="lbl">Total Saldo</span><span class="ms" style="font-size:20px;color:rgba(255,255,255,.85)">account_balance_wallet</span>
+          </div>
+          <div class="big" id="balance">Rp 0</div>
+          <div style="display:flex;gap:10px">
+            <div class="mini"><div class="k"><span class="ms" style="font-size:15px;color:#9FF3C4">south_west</span>Masuk hari ini</div><div class="v" id="inToday">Rp 0</div></div>
+            <div class="mini"><div class="k"><span class="ms" style="font-size:15px;color:#FFC9A3">north_east</span>Keluar hari ini</div><div class="v" id="outToday">Rp 0</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- stats -->
+      <div class="grid2" style="margin-top:16px">
+        <div class="card stat">
+          <div class="ico" style="background:rgba(22,163,74,.12)"><span class="ms fill" style="color:var(--green);font-size:19px">trending_up</span></div>
+          <div class="k">Income bulan ini</div><div class="v" id="inMonth" style="color:var(--green)">Rp 0</div>
+        </div>
+        <div class="card stat">
+          <div class="ico" style="background:rgba(229,72,77,.12)"><span class="ms fill" style="color:var(--red);font-size:19px">trending_down</span></div>
+          <div class="k">Expense bulan ini</div><div class="v" id="outMonth" style="color:var(--red)">Rp 0</div>
+        </div>
+      </div>
+
+      <!-- chart -->
+      <div class="card" style="margin-top:16px;padding:18px 16px 12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px">
+          <div style="font-size:14.5px;font-weight:700">Income vs Expense</div>
+          <div style="display:flex;gap:12px">
+            <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:#8B85A3;font-weight:600"><span style="width:8px;height:8px;border-radius:3px;background:var(--primary)"></span>Masuk</span>
+            <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:#8B85A3;font-weight:600"><span style="width:8px;height:8px;border-radius:3px;background:var(--orange)"></span>Keluar</span>
+          </div>
+        </div>
+        <div style="height:160px;padding:10px 2px 0"><canvas id="chart"></canvas></div>
+      </div>
+
+      <!-- recent -->
+      <div class="section-title"><h2>Aktivitas Terbaru</h2><a href="report.html" style="font-size:12.5px;font-weight:600">Lihat semua</a></div>
+      <div id="recent"></div>
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="active"><span class="ms">home</span>Beranda</a>
+      <a href="report.html"><span class="ms">receipt_long</span>Transaksi</a>
+      <a href="transaction.html" class="fab"><span class="ms">add</span></a>
+      <a href="report.html"><span class="ms">bar_chart</span>Laporan</a>
+      <a href="settings.html"><span class="ms">settings</span>Setting</a>
+    </nav>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/api.js?v=4"></script>
+  <script src="js/currency.js?v=4"></script>
+  <script src="js/utils.js?v=4"></script>
+  <script src="js/store.js?v=4"></script>
+  <script src="js/auth.js?v=4"></script>
+  <script src="js/dashboard.js?v=4"></script>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</body>
+</html>
