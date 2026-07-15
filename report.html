@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Riwayat & Laporan — Finance Daily QRIS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6C4CF0">
+  <link rel="apple-touch-icon" href="assets/icon/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Finance QRIS">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/report.css?v=4">
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <a href="dashboard.html" class="icon-btn"><span class="ms">arrow_back</span></a>
+        <h1>Riwayat</h1>
+      </div>
+      <div class="icon-btn" id="export-csv"><span class="ms" style="color:var(--primary)">download</span></div>
+    </div>
+
+    <div class="content">
+      <!-- ringkasan laporan -->
+      <div class="grid2" style="gap:12px">
+        <div class="card stat"><div class="k" style="margin-top:0">Total Income</div><div class="v" id="sumIn" style="color:var(--green)">Rp 0</div></div>
+        <div class="card stat"><div class="k" style="margin-top:0">Total Expense</div><div class="v" id="sumOut" style="color:var(--red)">Rp 0</div></div>
+        <div class="card stat"><div class="k" style="margin-top:0">Saldo</div><div class="v" id="sumBal">Rp 0</div></div>
+        <div class="card stat"><div class="k" style="margin-top:0">Jumlah Transaksi</div><div class="v" id="sumCount">0</div></div>
+      </div>
+
+      <!-- analitik ringkas -->
+      <div class="card" id="analytics" style="margin-top:14px;padding:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+          <div style="font-size:14px;font-weight:700">Analitik</div>
+          <span class="muted" style="font-size:10.5px;font-weight:600" id="anaScope">rentang aktif</span>
+        </div>
+        <div class="muted" style="font-size:11px;font-weight:600;margin:10px 0 8px">Pengeluaran per kategori</div>
+        <div id="catBars"></div>
+        <div class="muted" style="font-size:11px;font-weight:600;margin:16px 0 8px">Bulan ini vs bulan lalu</div>
+        <div id="monthCmp" class="grid2" style="gap:10px"></div>
+      </div>
+
+      <!-- search -->
+      <div class="input" style="margin-top:16px"><span class="ms">search</span><input id="search" placeholder="Cari kategori, deskripsi, ref…"></div>
+
+      <!-- date range -->
+      <div class="chips" style="margin-top:12px" id="ranges">
+        <button class="chip active" data-r="today">Hari Ini</button>
+        <button class="chip" data-r="week">Minggu Ini</button>
+        <button class="chip" data-r="month">Bulan Ini</button>
+        <button class="chip" data-r="year">Tahun Ini</button>
+        <button class="chip" data-r="all">Semua</button>
+      </div>
+
+      <!-- type -->
+      <div class="seg" id="types" style="margin-top:12px">
+        <button data-t="all" class="active">Semua</button>
+        <button data-t="income">Masuk</button>
+        <button data-t="expense">Keluar</button>
+      </div>
+
+      <!-- status -->
+      <div style="display:flex;gap:8px;margin-top:8px" id="statuses">
+        <button class="chip pill active" data-st="all">Semua status</button>
+        <button class="chip" data-st="Sukses">Sukses</button>
+        <button class="chip" data-st="Pending">Pending</button>
+      </div>
+
+      <div class="section-title" style="margin:18px 2px 12px">
+        <div class="muted" style="font-size:12.5px;font-weight:600"><b id="count" style="color:var(--ink);font-weight:800">0</b> transaksi</div>
+        <button class="btn-ghost" id="print" style="width:auto;padding:7px 14px;border-radius:12px;font-size:12px;display:flex;align-items:center;gap:6px"><span class="ms" style="font-size:16px">print</span>Cetak</button>
+      </div>
+
+      <div id="list"></div>
+      <button class="btn-ghost hidden" id="load-more" style="margin-top:6px">Muat lebih banyak</button>
+    </div>
+
+    <!-- modal detail transaksi -->
+    <div id="detail-backdrop" class="modal-backdrop hidden">
+      <div class="modal">
+        <div class="modal-head">
+          <h3 id="d-title">Detail Transaksi</h3>
+          <button class="icon-btn" id="d-close"><span class="ms">close</span></button>
+        </div>
+        <div id="d-body" class="modal-body"></div>
+        <div class="modal-actions">
+          <button class="btn-ghost" id="d-edit"><span class="ms" style="font-size:18px">edit</span>Edit</button>
+          <button class="btn" id="d-print" style="width:auto;flex:1"><span class="ms" style="font-size:18px">print</span>Cetak</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="dashboard.html"><span class="ms">home</span>Beranda</a>
+      <a href="report.html" class="active"><span class="ms">receipt_long</span>Transaksi</a>
+      <a href="transaction.html" class="fab"><span class="ms">add</span></a>
+      <a href="report.html"><span class="ms">bar_chart</span>Laporan</a>
+      <a href="settings.html"><span class="ms">settings</span>Setting</a>
+    </nav>
+  </div>
+
+  <script src="js/api.js?v=4"></script>
+  <script src="js/currency.js?v=4"></script>
+  <script src="js/utils.js?v=4"></script>
+  <script src="js/store.js?v=4"></script>
+  <script src="js/auth.js?v=4"></script>
+  <script src="js/report.js?v=4"></script>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</body>
+</html>
